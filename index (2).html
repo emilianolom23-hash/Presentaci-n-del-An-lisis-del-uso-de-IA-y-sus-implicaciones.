@@ -1,0 +1,202 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Análisis del uso de IA y sus implicaciones</title>
+<style>
+:root{--ground:#110d0b;--hot:#ffb27c;--text:#fbf3ea}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--ground);color:var(--text);font-family:ui-sans-serif,system-ui,-apple-system,'Segoe UI',sans-serif;line-height:1.6}
+#cv{position:fixed;inset:0;width:100%;height:100%;display:block;z-index:-2}
+.scrim{position:fixed;inset:0;z-index:-1;pointer-events:none;background:radial-gradient(60% 55% at 50% 50%,color-mix(in srgb,var(--ground) 22%,transparent),transparent 100%)}
+.prog{position:fixed;left:0;top:0;height:3px;width:100%;transform-origin:0 50%;transform:scaleX(0);background:var(--hot);z-index:5}
+.panel{min-height:100svh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:90px 20px}
+.rv{opacity:0;transform:translateY(46px);filter:blur(10px);transition:opacity .9s ease,transform 1s cubic-bezier(.16,1,.3,1),filter .9s ease;transition-delay:var(--d,0s)}
+.in .rv,.rv.in{opacity:1;transform:none;filter:none}
+.badge{display:inline-flex;align-items:center;gap:8px;height:30px;padding:0 12px;border-radius:999px;font-size:13px;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.3);box-shadow:inset 0 1px 0 rgba(255,255,255,.45);backdrop-filter:blur(16px) saturate(1.6)}
+.badge i{width:6px;height:6px;border-radius:50%;background:var(--hot);box-shadow:0 0 10px var(--hot)}
+h1,h2{font-family:Georgia,'Times New Roman',serif;font-weight:400;letter-spacing:-.025em;margin:0}
+h1{max-width:15ch;font-size:clamp(38px,6vw,92px);line-height:1}
+
+h2.thanks{font-size:clamp(56px,11vw,160px);margin-bottom:10px}
+h2{font-size:clamp(32px,4.6vw,60px);line-height:1.05;margin-bottom:18px}
+.desc{margin:22px 0 0;max-width:46ch;font-size:clamp(15px,1.3vw,17px);opacity:.8}
+.bar{display:flex;align-items:center;gap:8px;width:min(620px,100%);height:60px;margin-top:32px;padding:6px 6px 6px 22px;border-radius:999px;background:linear-gradient(135deg,rgba(255,255,255,.20),rgba(255,255,255,.06));border:1px solid rgba(255,255,255,.28);box-shadow:inset 0 1px 0 rgba(255,255,255,.5),0 20px 50px -20px rgba(0,0,0,.5);backdrop-filter:blur(22px) saturate(1.8);-webkit-backdrop-filter:blur(22px) saturate(1.8)}
+.ph{flex:1;min-width:0;text-align:left;font-size:15px;opacity:.7;white-space:nowrap;overflow:hidden}
+.caret{display:inline-block;width:2px;height:1.1em;margin-left:2px;vertical-align:-.15em;background:var(--hot);animation:b 1s steps(1) infinite}
+@keyframes b{50%{opacity:0}}
+.go{flex:none;display:inline-flex;align-items:center;height:100%;padding:0 22px;border-radius:999px;font-weight:600;font-size:15px;text-decoration:none;color:var(--ground);background:var(--text)}
+.go:focus-visible{outline:2px solid var(--hot);outline-offset:3px}
+.hint{margin-top:26px;font-size:13px;opacity:.65}
+.card{position:relative;width:min(760px,100%);text-align:left;padding:clamp(24px,4vw,44px);border-radius:32px;background:linear-gradient(135deg,rgba(255,255,255,.20),rgba(255,255,255,.05) 45%,rgba(255,255,255,.10));border:1px solid rgba(255,255,255,.28);box-shadow:inset 0 1px 0 rgba(255,255,255,.5),inset 0 -1px 0 rgba(255,255,255,.08),0 30px 70px -25px rgba(0,0,0,.55);backdrop-filter:blur(26px) saturate(1.9) brightness(1.08);-webkit-backdrop-filter:blur(26px) saturate(1.9) brightness(1.08);text-shadow:0 1px 14px rgba(0,0,0,.35)}
+.card p{margin:0 0 12px;max-width:60ch;opacity:.95}
+.lead{font-size:17px}
+.row{display:grid;grid-template-columns:140px 1fr;gap:18px;padding:16px 0;border-top:1px solid rgba(255,255,255,.22)}
+.row b{font-family:Georgia,serif;font-weight:400;font-size:20px;color:var(--hot)}
+.row b small{display:block;font:13px ui-sans-serif,system-ui,sans-serif;color:var(--text);opacity:.6}
+.row p,.row ol{margin:0}
+.row ol{padding-left:20px}
+.cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:22px 30px;margin-top:8px}
+.cols h3{font-family:Georgia,serif;font-weight:400;font-size:22px;margin:0 0 6px;color:var(--hot)}
+.cols p{margin:0}
+.rules{padding-left:22px;margin:0}
+.rules li{margin-bottom:12px}
+.end{font-size:13px;opacity:.6;margin-top:28px}
+@media(max-width:640px){.row,.cols{grid-template-columns:1fr;gap:8px}.go{padding:0 16px}.panel{padding:70px 14px}}
+@media(prefers-reduced-motion:reduce){.caret{animation:none}html{scroll-behavior:auto}.rv{transition:none}}
+</style>
+</head>
+<body>
+<canvas id="cv" aria-hidden="true"></canvas>
+<div class="scrim"></div>
+<div class="prog" id="prog"></div>
+
+<section class="panel in" id="top">
+  <h1 class="rv">Presentación del Análisis del uso de IA y sus implicaciones.</h1>
+</section>
+
+<section class="panel">
+  <div class="card">
+    <h2 class="rv">Mejorar sin pasarnos</h2>
+    <p class="lead rv" style="--d:.1s">La mejora continua es revisar lo que hacemos y hacerlo un poco mejor cada vez. Así se optimizan procesos, productos y servicios, también los que usan IA. Para medirlo hay tres ideas que se parecen, pero no son lo mismo:</p>
+    <div class="cols">
+      <div class="rv" style="--d:.2s"><h3>Eficacia</h3><p>Logré lo que quería: la IA me dio lo que pedí.</p></div>
+      <div class="rv" style="--d:.3s"><h3>Eficiencia</h3><p>Lo logré con pocas consultas y poca energía.</p></div>
+      <div class="rv" style="--d:.4s"><h3>Efectividad</h3><p>Y además dejó algo bueno: aprendí y no dañé nada.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="panel">
+  <div class="card">
+    <h2 class="rv">Implicaciones sociales</h2>
+    <div class="cols">
+      <div class="rv" style="--d:.1s"><h3>Ya la usamos</h3><p>En EE. UU., <b>62 %</b> de estudiantes usó IA para la tarea a finales de 2025; meses antes era 48 %.</p></div>
+      <div class="rv" style="--d:.2s"><h3>Y lo notamos</h3><p><b>67 %</b> cree que usarla en la escuela daña el pensamiento crítico.</p></div>
+      <div class="rv" style="--d:.3s"><h3>Hay una línea</h3><p>Pedir ideas o explicaciones ayuda. Copiar la respuesta, para <b>45 %</b>, ya es trampa.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="panel">
+  <div class="card">
+    <h2 class="rv">Implicaciones ambientales</h2>
+    <div class="cols">
+      <div class="rv" style="--d:.1s"><h3>Cada pregunta gasta</h3><p>La IA vive en centros de datos que consumen electricidad (y agua para enfriarse).</p></div>
+      <div class="rv" style="--d:.2s"><h3>Y va en aumento</h3><p>Para 2030 consumirían unos <b>945 TWh</b>, casi lo que gasta todo Japón hoy.</p></div>
+      <div class="rv" style="--d:.3s"><h3>Se puede mejorar</h3><p>Con equipos y modelos más eficientes, la demanda sería <b>20 %</b> menor en 2035.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="panel">
+  <div class="card">
+    <h2 class="rv">Cuando se usa mal</h2>
+    <div class="cols">
+      <div class="rv" style="--d:.1s"><h3>Ejemplos</h3><p>Entregar un trabajo sin leerlo, inventar fotos o audios de alguien, compartir noticias falsas.</p></div>
+      <div class="rv" style="--d:.2s"><h3>Consecuencias</h3><p>Pierdes calificación y confianza, no aprendes, y puedes lastimar a otra persona.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="panel">
+  <div class="card">
+    <h2 class="rv">Tres hábitos para empezar</h2>
+    <div class="cols">
+      <div class="rv" style="--d:.1s"><h3>Piensa primero</h3><p>Intenta tú, luego pregunta.</p></div>
+      <div class="rv" style="--d:.2s"><h3>Verifica</h3><p>Compara con una fuente confiable.</p></div>
+      <div class="rv" style="--d:.3s"><h3>Da crédito</h3><p>Di cuándo usaste IA.</p></div>
+    </div>
+    <p class="end rv" style="--d:.4s">Fuentes: IEA, <i>Energy and AI</i> (2025); RAND, encuesta American Youth Panel (marzo 2026).</p>
+  </div>
+</section>
+
+<section class="panel">
+  <h2 class="rv thanks">Gracias</h2>
+</section>
+
+<script>
+(function(){
+  var reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // Revelar secciones al entrar y ocultarlas al salir
+  var io=new IntersectionObserver(function(es){es.forEach(function(e){e.target.classList.toggle('in',e.isIntersecting)})},{threshold:.25});
+  document.querySelectorAll('.panel').forEach(function(p){io.observe(p)});
+
+  // Fondo WebGL
+  var VERT="attribute vec2 p;void main(){gl_Position=vec4(p,0.,1.);}";
+  var FRAG=["precision highp float;",
+  "uniform vec2 uRes;uniform float uTime;uniform vec2 uMouse;uniform float uHover;uniform float uIntro;uniform float uCell;uniform float uScroll;",
+  "uniform vec3 uGround;uniform vec3 uFlow;uniform vec3 uHot;",
+  "float flow(vec2 p,float t){vec2 w=p*2.;for(int i=1;i<6;i++){float fi=float(i);",
+  "w+=vec2(.85/fi*sin(fi*w.y*1.2+t*.42+fi*2.3),.7/fi*cos(fi*w.x*1.05-t*.31+fi*1.1));}",
+  "float b=.5+.5*sin(w.x*2.6-w.y*1.7);return smoothstep(.15,1.,pow(b,2.2));}",
+  "void main(){",
+  "float a=.5236;mat2 R=mat2(cos(a),-sin(a),sin(a),cos(a));",
+  "vec2 px=R*gl_FragCoord.xy;vec2 cell=floor(px/uCell);vec2 cc=(cell+.5)*uCell;",
+  "vec2 cs=(cc*R-.5*uRes)/uRes.y;cs.y+=uScroll;",
+  "vec2 p=(gl_FragCoord.xy-.5*uRes)/uRes.y;p.y+=uScroll;",
+  "float I=flow(cs,uTime);",
+  "vec2 ms=cs;ms.y-=uScroll;",
+  "float md=length(ms-uMouse);I=clamp(I+uHover*.55*exp(-md*md*14.),0.,1.);",
+  "I*=uIntro;",
+  "float r=sqrt(I)*.54*uCell;float d=length(px-cc);",
+  "float dotm=1.-smoothstep(r-1.,r+.6,d);",
+  "float g=flow(p,uTime)*uIntro;",
+  "vec3 col=uGround+uFlow*g*.16;",
+  "vec3 ink=mix(uFlow,uHot,smoothstep(.7,1.,I)*.85);",
+  "col=mix(col,ink,dotm);",
+  "vec2 uv=gl_FragCoord.xy/uRes;col*=mix(.6,1.,smoothstep(1.1,.3,length((uv-.5)*vec2(1.,1.25))));",
+  "gl_FragColor=vec4(col,1.);}"].join("");
+
+  function rgb(h){var n=parseInt(h.slice(1),16);return[(n>>16&255)/255,(n>>8&255)/255,(n&255)/255]}
+  // Paletas: ember -> cobalt -> jade a lo largo de la página
+  var P=[{g:'#110d0b',f:'#d9521d',h:'#ffb27c',t:'#fbf3ea'},{g:'#070a16',f:'#3360f2',h:'#a8c0ff',t:'#eef2ff'},{g:'#06110d',f:'#1f9a6b',h:'#a6f0c8',t:'#ecfbf3'}].map(function(p){return{g:rgb(p.g),f:rgb(p.f),h:rgb(p.h),t:rgb(p.t)}});
+  function mix(a,b,k){return[a[0]+(b[0]-a[0])*k,a[1]+(b[1]-a[1])*k,a[2]+(b[2]-a[2])*k]}
+  function css(c){return'rgb('+c.map(function(v){return Math.round(v*255)}).join(',')+')'}
+  function pal(k){var s=k*2,i=Math.min(1,Math.floor(s)),f=s-i,a=P[i],b=P[i+1];
+    return{g:mix(a.g,b.g,f),f:mix(a.f,b.f,f),h:mix(a.h,b.h,f),t:mix(a.t,b.t,f)}}
+
+  var cv=document.getElementById('cv'),gl=cv.getContext('webgl',{antialias:false,alpha:false});
+  function sh(t,s){var o=gl.createShader(t);gl.shaderSource(o,s);gl.compileShader(o);return gl.getShaderParameter(o,gl.COMPILE_STATUS)?o:null}
+  var vs=gl&&sh(gl.VERTEX_SHADER,VERT),fs=gl&&sh(gl.FRAGMENT_SHADER,FRAG),pr=gl&&gl.createProgram();
+  if(!gl||!vs||!fs){cv.style.background='radial-gradient(70% 60% at 30% 30%,rgba(217,82,29,.5),transparent 70%)';return}
+  gl.attachShader(pr,vs);gl.attachShader(pr,fs);gl.linkProgram(pr);gl.useProgram(pr);
+  gl.bindBuffer(gl.ARRAY_BUFFER,gl.createBuffer());
+  gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([-1,-1,3,-1,-1,3]),gl.STATIC_DRAW);
+  var loc=gl.getAttribLocation(pr,'p');gl.enableVertexAttribArray(loc);gl.vertexAttribPointer(loc,2,gl.FLOAT,false,0,0);
+  var U={};['uRes','uTime','uMouse','uHover','uIntro','uCell','uScroll','uGround','uFlow','uHot'].forEach(function(n){U[n]=gl.getUniformLocation(pr,n)});
+
+  var dpr=1,w=1,h=1,m={x:0,y:0,tx:0,ty:0,hv:0,th:0},t=0,last=performance.now(),start=last;
+  var sc=0,tsc=0,root=document.documentElement,prog=document.getElementById('prog');
+  function measure(){var r=cv.getBoundingClientRect();w=r.width;h=r.height;dpr=Math.min(2,Math.max(1,devicePixelRatio||1));
+    cv.width=Math.max(1,Math.round(w*dpr));cv.height=Math.max(1,Math.round(h*dpr));gl.viewport(0,0,cv.width,cv.height)}
+  function onScroll(){var max=Math.max(1,root.scrollHeight-innerHeight);tsc=Math.min(1,Math.max(0,scrollY/max));prog.style.transform='scaleX('+tsc+')'}
+  function draw(now){
+    var dt=Math.min(.05,(now-last)/1000);last=now;if(!reduce)t+=dt;
+    var it=reduce?1:Math.min(1,Math.max(0,(now-start-250)/1800));
+    m.x+=(m.tx-m.x)*.08;m.y+=(m.ty-m.y)*.08;m.hv+=(m.th-m.hv)*.06;
+    sc+=(tsc-sc)*.07; // el scroll se suaviza
+    var c=pal(sc);
+    gl.uniform2f(U.uRes,cv.width,cv.height);
+    gl.uniform1f(U.uTime,t+4+sc*14);   // el flujo avanza al hacer scroll
+    gl.uniform1f(U.uScroll,sc*3.2);    // y el fondo se desplaza
+    gl.uniform2f(U.uMouse,m.x,m.y);gl.uniform1f(U.uHover,reduce?0:m.hv);
+    gl.uniform1f(U.uIntro,1-Math.pow(1-it,3));gl.uniform1f(U.uCell,7*dpr);
+    gl.uniform3f(U.uGround,c.g[0],c.g[1],c.g[2]);gl.uniform3f(U.uFlow,c.f[0],c.f[1],c.f[2]);gl.uniform3f(U.uHot,c.h[0],c.h[1],c.h[2]);
+    gl.drawArrays(gl.TRIANGLES,0,3);
+    root.style.setProperty('--ground',css(c.g));root.style.setProperty('--hot',css(c.h));root.style.setProperty('--text',css(c.t));
+  }
+  function loop(now){draw(now);if(!document.hidden)requestAnimationFrame(loop)}
+  addEventListener('pointermove',function(e){m.th=1;m.tx=(e.clientX-w/2)/h;m.ty=(h/2-e.clientY)/h});
+  document.addEventListener('pointerleave',function(){m.th=0});
+  addEventListener('scroll',onScroll,{passive:true});
+  addEventListener('resize',function(){measure();onScroll()});
+  document.addEventListener('visibilitychange',function(){if(!document.hidden){last=performance.now();requestAnimationFrame(loop)}});
+  measure();onScroll();requestAnimationFrame(loop);
+})();
+</script>
+</body>
+</html>
